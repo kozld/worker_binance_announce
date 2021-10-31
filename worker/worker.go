@@ -16,7 +16,10 @@ type Worker struct {
 }
 
 func NewWorker(conf *config.WorkerConfig, fetcher *Fetcher, trader *Trader) *Worker {
-	return &Worker{conf, fetcher, trader, make(map[string]bool)}
+	// Exclude "CHESS" token
+	excludeTokens := make(map[string]bool)
+	excludeTokens["CHESS"] = true
+	return &Worker{conf, fetcher, trader, excludeTokens}
 }
 
 func (w *Worker) Start() {
