@@ -52,6 +52,8 @@ func (t *Trader) CreateOrder(currency string, test bool) error {
 	fmt.Println("[PRICE]", lastPrice)
 	lastPrice = lastPrice + (lastPrice * 0.3)
 	fmt.Println("[PRICE + 30%]", lastPrice)
+	amount := (t.conf.QuantityUSDT - 1) / lastPrice
+	fmt.Println("[AMOUNT]", amount)
 
 	// better avoid using float, take the following decimal library for example
 	// `go get github.com/shopspring/decimal`
@@ -70,7 +72,7 @@ func (t *Trader) CreateOrder(currency string, test bool) error {
 		Type:         "limit",
 		Account:      "spot", // create spot order. set to "margin" if creating margin orders
 		Side:         "buy",
-		Amount:       "100",
+		Amount:       fmt.Sprintf("%f", amount),
 		Price:        fmt.Sprintf("%f", lastPrice), // use last price
 		TimeInForce:  "gtc",
 		AutoBorrow:   false,

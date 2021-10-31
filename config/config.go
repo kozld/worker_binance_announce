@@ -9,8 +9,9 @@ type WorkerConfig struct {
 }
 
 type TraderConfig struct {
-	GateIOApiKey    string `env:"GATEIO_API_KEY,required"`
-	GateIOApiSecret string `env:"GATEIO_API_SECRET,required"`
+	QuantityUSDT    float64 `env:"QUANTITY_USDT,required"`
+	GateIOApiKey    string  `env:"GATEIO_API_KEY,required"`
+	GateIOApiSecret string  `env:"GATEIO_API_SECRET,required"`
 }
 
 type DatabaseConfig struct {
