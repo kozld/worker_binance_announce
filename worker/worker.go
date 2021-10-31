@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -10,11 +11,12 @@ import (
 type Worker struct {
 	conf           *config.WorkerConfig
 	fetcher        *Fetcher
+	trader         *Trader
 	excludedTokens map[string]bool
 }
 
-func NewWorker(conf *config.WorkerConfig, fetcher *Fetcher) *Worker {
-	return &Worker{conf, fetcher, make(map[string]bool)}
+func NewWorker(conf *config.WorkerConfig, fetcher *Fetcher, trader *Trader) *Worker {
+	return &Worker{conf, fetcher, trader, make(map[string]bool)}
 }
 
 func (w *Worker) Start() {
@@ -25,6 +27,7 @@ func (w *Worker) Start() {
 		for _, gem := range tokens {
 			if _, exist := w.excludedTokens[gem]; !exist {
 				log.Printf("[TOKEN] (%s)", gem)
+				fmt.Println("[TRADE]", w.trader.CreateOrder(gem, false))
 				w.excludedTokens[gem] = true
 			} else {
 				log.Printf("Token (%s) already processed", gem)

@@ -1,5 +1,9 @@
+github.com/antihax/optional v1.0.0 h1:xK2lYat7ZLaVVcIuj82J8kIro4V6kDe0AUDFboUCwcg=
+github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kdvxnR2qWY=
 github.com/caarlos0/env/v6 v6.7.2 h1:Jiy2dBHvNgCfNGMP0hOZW6jHUbiENvP+VWDtLz4n1Kg=
 github.com/caarlos0/env/v6 v6.7.2/go.mod h1:FE0jGiAnQqtv2TenJ4KTa8+/T2Ss8kdS5s1VEjasoN0=
+github.com/gateio/gateapi-go/v6 v6.22.3 h1:1fmBf2P3CCdb4k6YgDzgPJOpfkPFocq4AuvgOwMix4g=
+github.com/gateio/gateapi-go/v6 v6.22.3/go.mod h1:racCcjrdyOUbRDO5eCUGUiyDPrF/ZmwBj/bupPZTVLY=
 github.com/lib/pq v1.10.3 h1:v9QZf2Sn6AmjXtQeFpdoq/eaNtYP6IN+7lcrygsIAtg=
 github.com/lib/pq v1.10.3/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
 github.com/matryer/is v1.4.0 h1:sosSmIWwkYITGrxZ25ULNDeKiMNzFSr4V/eqBQP0PeE=

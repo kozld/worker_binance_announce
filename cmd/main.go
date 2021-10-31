@@ -18,6 +18,9 @@ func main() {
 	log.Println("Getting database config...")
 	dbConf := config.GetDatabaseConfig()
 
+	log.Println("Getting trader config...")
+	traderConf := config.GetTraderConfig()
+
 	var db *database.Database
 
 	for {
@@ -34,6 +37,7 @@ func main() {
 	}
 
 	fetcher := worker.NewFetcher(db)
-	w := worker.NewWorker(workerConf, fetcher)
+	trader := worker.NewTrader(traderConf)
+	w := worker.NewWorker(workerConf, fetcher, trader)
 	w.Start()
 }

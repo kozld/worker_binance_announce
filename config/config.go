@@ -8,6 +8,11 @@ import (
 type WorkerConfig struct {
 }
 
+type TraderConfig struct {
+	GateIOApiKey    string `env:"GATEIO_API_KEY,required"`
+	GateIOApiSecret string `env:"GATEIO_API_SECRET,required"`
+}
+
 type DatabaseConfig struct {
 	PostgresHost     string `env:"POSTGRES_HOST" envDefault:"postgres"`
 	PostgresPort     int    `env:"POSTGRES_PORT" envDefault:"5432"`
@@ -18,6 +23,15 @@ type DatabaseConfig struct {
 
 func GetWorkerConfig() *WorkerConfig {
 	cfg := &WorkerConfig{}
+	if err := env.Parse(cfg); err != nil {
+		log.Fatal("Cannot parse initial ENV vars: ", err)
+	}
+
+	return cfg
+}
+
+func GetTraderConfig() *TraderConfig {
+	cfg := &TraderConfig{}
 	if err := env.Parse(cfg); err != nil {
 		log.Fatal("Cannot parse initial ENV vars: ", err)
 	}
