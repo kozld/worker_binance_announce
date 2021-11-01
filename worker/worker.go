@@ -26,6 +26,10 @@ func (w *Worker) Start() {
 		log.Println("Fetching announcements...")
 		tokens := w.fetcher.Fetch()
 
+		if len(tokens) == 0 {
+			log.Println("No announcements yet")
+		}
+
 		for _, gem := range tokens {
 			if _, exist := w.excludedTokens[gem]; !exist {
 				log.Printf("!!! NEW TOKEN (%s) FOUND !!!", gem)

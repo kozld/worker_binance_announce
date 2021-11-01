@@ -43,8 +43,6 @@ func (t *Trader) CreateOrder(currency string, test bool) error {
 		return err
 	}
 
-	// TODO: Check tickers list length > 0
-
 	lastPrice, err := strconv.ParseFloat(tickers[0].Last, 64)
 	if err != nil {
 		return err
