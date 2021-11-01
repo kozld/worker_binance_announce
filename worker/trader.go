@@ -21,51 +21,42 @@ func NewTrader(conf *config.TraderConfig) *Trader {
 }
 
 func (t *Trader) CreateOrder(currency string, test bool) error {
+
 	client := gateapi.NewAPIClient(gateapi.NewConfiguration())
 	if test {
 		client.ChangeBasePath("https://fx-api-testnet.gateio.ws/api/v4")
 	}
+
 	ctx := context.WithValue(context.Background(), gateapi.ContextGateAPIV4, gateapi.GateAPIV4{
 		Key:    t.conf.GateIOApiKey,
 		Secret: t.conf.GateIOApiSecret,
 	})
 
 	currencyPair := fmt.Sprintf("%s_USDT", currency)
-	//currency := "USDT"
 	cp, _, err := client.SpotApi.GetCurrencyPair(ctx, currencyPair)
 	if err != nil {
 		return err
 	}
-	//log.Printf("testing against currency pair: %s\n", cp.Id)
-	//minAmount := cp.MinQuoteAmount
 
 	tickers, _, err := client.SpotApi.ListTickers(ctx, &gateapi.ListTickersOpts{CurrencyPair: optional.NewString(cp.Id)})
 	if err != nil {
 		return err
 	}
 
+	// TODO: Check tickers list length > 0
+
 	lastPrice, err := strconv.ParseFloat(tickers[0].Last, 64)
 	if err != nil {
 		return err
 	}
+	log.Printf("(%s) Last price: %f", currency, lastPrice)
 
-	fmt.Println("[PRICE]", lastPrice)
+	// Increase last price +30%
 	lastPrice = lastPrice + (lastPrice * 0.3)
-	fmt.Println("[PRICE + 30%]", lastPrice)
-	amount := (t.conf.QuantityUSDT - 1) / lastPrice
-	fmt.Println("[AMOUNT]", amount)
+	log.Printf("(%s) Target price (+30 percent): %f", currency, lastPrice)
 
-	// better avoid using float, take the following decimal library for example
-	// `go get github.com/shopspring/decimal`
-	//orderAmount := decimal.RequireFromString(minAmount).Mul(decimal.NewFromInt32(2))
-	//
-	//balance, _, err := client.SpotApi.ListSpotAccounts(ctx, &gateapi.ListSpotAccountsOpts{Currency: optional.NewString(currency)})
-	//if err != nil {
-	//	panicGateError(err)
-	//}
-	//if decimal.RequireFromString(balance[0].Available).Cmp(orderAmount) < 0 {
-	//	log.Fatal("balance not enough")
-	//}
+	// Figure out amount
+	amount := (t.conf.QuantityUSDT - 1) / lastPrice
 
 	newOrder := gateapi.Order{
 		CurrencyPair: cp.Id,
@@ -85,32 +76,5 @@ func (t *Trader) CreateOrder(currency string, test bool) error {
 	}
 	log.Printf("order created with ID: %s, status: %s\n", createdOrder.Id, createdOrder.Status)
 
-	//if createdOrder.Status == "open" {
-	//	order, _, err := client.SpotApi.GetOrder(ctx, createdOrder.Id, createdOrder.CurrencyPair, nil)
-	//	if err != nil {
-	//		return err
-	//	}
-	//	log.Printf("order %s filled: %s, left: %s\n", order.Id, order.FilledTotal, order.Left)
-	//	//result, _, err := client.SpotApi.CancelOrder(ctx, createdOrder.Id, createdOrder.CurrencyPair)
-	//	//if err != nil {
-	//	//	panicGateError(err)
-	//	//}
-	//	//if result.Status == "cancelled" {
-	//	//	log.Printf("order %s cancelled\n", createdOrder.Id)
-	//	//}
-	//}
-
 	return nil
-
-	//else {
-	//	// order finished
-	//	trades, _, err := client.SpotApi.ListMyTrades(ctx, createdOrder.CurrencyPair,
-	//		&gateapi.ListMyTradesOpts{OrderId: optional.NewString(createdOrder.Id)})
-	//	if err != nil {
-	//		panicGateError(err)
-	//	}
-	//	for _, t := range trades {
-	//		log.Printf("order %s filled %s with price: %s\n", t.OrderId, t.Amount, t.Price)
-	//	}
-	//}
 }

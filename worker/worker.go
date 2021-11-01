@@ -1,7 +1,6 @@
 package worker
 
 import (
-	"fmt"
 	"log"
 	"time"
 
@@ -25,12 +24,15 @@ func NewWorker(conf *config.WorkerConfig, fetcher *Fetcher, trader *Trader) *Wor
 func (w *Worker) Start() {
 	for {
 		log.Println("Fetching announcements...")
-
 		tokens := w.fetcher.Fetch()
+
 		for _, gem := range tokens {
 			if _, exist := w.excludedTokens[gem]; !exist {
-				log.Printf("[TOKEN] (%s)", gem)
-				fmt.Println("[TRADE]", w.trader.CreateOrder(gem, false))
+				log.Printf("!!! NEW TOKEN (%s) FOUND !!!", gem)
+
+				log.Println("Trying to buy on Gate.io...")
+				log.Println(w.trader.CreateOrder(gem, false))
+
 				w.excludedTokens[gem] = true
 			} else {
 				log.Printf("Token (%s) already processed", gem)

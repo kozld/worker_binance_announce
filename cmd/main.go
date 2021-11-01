@@ -12,11 +12,11 @@ import (
 )
 
 func main() {
-	log.Println("Getting worker config...")
-	workerConf := config.GetWorkerConfig()
-
 	log.Println("Getting database config...")
 	dbConf := config.GetDatabaseConfig()
+
+	log.Println("Getting worker config...")
+	workerConf := config.GetWorkerConfig()
 
 	log.Println("Getting trader config...")
 	traderConf := config.GetTraderConfig()
