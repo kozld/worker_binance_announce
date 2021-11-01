@@ -3,6 +3,7 @@ package worker
 import (
 	"log"
 	"regexp"
+	"time"
 
 	"github.com/stdi0/worker_binance_announce/database"
 )
@@ -24,7 +25,25 @@ func NewFetcher(db *database.Database) *Fetcher {
 func (f *Fetcher) Fetch() []string {
 	tokens := make([]string, 0)
 	re := regexp.MustCompile(RegularExpression)
-	rows, _ := f.db.Conn.Query(database.SelectQuery)
+
+	// Fetch announcements from db
+	rows, err := f.db.Conn.Query(database.SelectQuery)
+
+	// If error, try reconnect to db...
+	if err != nil {
+		log.Printf("error: %s", err.Error())
+		log.Println("Trying reconnect to db after 3 sec...")
+		time.Sleep(3 * time.Second)
+
+		newDb, err := f.db.ReInit()
+		if err == nil {
+			// If reconnect success
+			log.Println("Successfully reconnected")
+			f.db = newDb
+		}
+
+		return tokens
+	}
 
 	for {
 		var text string
