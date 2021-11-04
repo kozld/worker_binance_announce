@@ -19,7 +19,7 @@ type DatabaseConfig struct {
 	PostgresPort     int    `env:"POSTGRES_PORT" envDefault:"5432"`
 	PostgresUser     string `env:"POSTGRES_USER" envDefault:"postgres"`
 	PostgresPassword string `env:"POSTGRES_PASSWORD,required"`
-	PostgresDbName   string `env:"POSTGRES_DB" envDefault:"binance_page"`
+	PostgresDbName   string `env:"POSTGRES_DB" envDefault:"binance_api"`
 }
 
 func GetWorkerConfig() *WorkerConfig {
